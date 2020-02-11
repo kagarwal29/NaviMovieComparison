@@ -1,9 +1,11 @@
 package NaviQAProject.MovieComparison;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -18,28 +20,35 @@ import Interfaces.IScrapePage;
 public class DirectorMovieComparison {
 	
 	static Logger log = Logger.getLogger(DirectorMovieComparison.class.getName());
-	Map<String, HashMap<String,String>> mpMaps=new HashMap<String, HashMap<String,String>>();
+	
+	ArrayList<String> list = new ArrayList<String>();
+	
 	
 	@BeforeTest
 	public void setup() {
 		CoreFactory.setBrowser(Browser.Chrome.toString());
+		list.add("IMDB");
+		list.add("LetterBoxD");
 	}
 	
 	@Test(testName = "SingleDirectorDifferentSiteComparison",
-	          dataProvider = "DirectorAndWebsiteName",
+	          dataProvider = "DirectorName",
 	          dataProviderClass = DirectorMovieComparisonDataProvider.class)
-	    public void movieComparison(String dName, String siteName, String rootNodeKey, String rootNodeValue){
-		
-		IListMovies siteObject=CoreFactory.getSiteObject(siteName);		
-		String url = siteObject.searchMoviesByDirector(dName);
-		IScrapePage scrape = CoreFactory.getPageObject(siteName);
-		HashMap<String,String> map=scrape.scrapeAndStore(url, rootNodeKey, rootNodeValue);
-		mpMaps.put(siteName, map);
+	    public void movieComparison(String dName){
+		Map<String, HashMap<String,String>> mpMaps=new HashMap<String, HashMap<String,String>>();
+			for (String siteName:list) {
+				IListMovies siteObject=CoreFactory.getSiteObject(siteName);		
+				String url = siteObject.searchMoviesByDirector(dName);
+				IScrapePage scrape = CoreFactory.getPageObject(siteName);
+				HashMap<String,String> map=scrape.scrapeAndStore(url);
+				mpMaps.put(siteName, map);
+			}
+			if (null!=mpMaps)
+			new CompareMovieList(mpMaps);
 	}
 	
 @AfterTest
-public void compareAndReportResult() {
-	new CompareMovieList(mpMaps);
-	CoreFactory.getWebDriverInstance().quit();
-}
+public void compareAndReportResult() {	
+	CoreFactory.getWebDriverInstance().quit();	
+	}
 }

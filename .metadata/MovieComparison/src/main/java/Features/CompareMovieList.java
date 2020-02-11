@@ -16,7 +16,8 @@ public class CompareMovieList {
 
 	public CompareMovieList(Map<String, HashMap<String, String>> mpMaps) {
 
-	    MapDifference<String, String> diff = Maps.difference(mpMaps.get("IMDB"), mpMaps.get("LetterBoxD"));
+	    
+		MapDifference<String, String> diff = Maps.difference(mpMaps.get("IMDB"), mpMaps.get("LetterBoxD"));
 	    ConsolePrintInTabularFormat table = new ConsolePrintInTabularFormat();
 	    String[] columnNames = {"Title","ReleaseDate"};
 	    

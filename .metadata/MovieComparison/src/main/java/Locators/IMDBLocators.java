@@ -2,6 +2,8 @@ package Locators;
 
 public class IMDBLocators {
 
+	public static final String ROOT_KEY = "id";
+	public static final String ROOT_KEY_VALUE = "director";
 	public static final String SEARCH_BAR = "suggestion-search";
 	public static final String SEARCH_BUTTON = "suggestion-search-button";
 	public static final String DIR_NAME = "//div[@class='findSection'][1]//*[text()='%s']";

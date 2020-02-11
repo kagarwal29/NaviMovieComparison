@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import org.testng.Assert;
 
 import Interfaces.IScrapePage;
+import Locators.IMDBLocators;
 
 
 public class ScrapeIMDBPage implements IScrapePage{
@@ -19,13 +20,13 @@ public class ScrapeIMDBPage implements IScrapePage{
 	HashMap<String,String> imdbMap = new HashMap<String,String>();
 
 	
-	public HashMap<String,String> scrapeAndStore(String url, String key, String value){
+	public HashMap<String,String> scrapeAndStore(String url){
 		
 		Document doc;
 		try {
 			doc = Jsoup.connect(url).get();
 			log.info(String.format("Connected to '%s'",url));
-			Elements elms = doc.getElementsByAttributeValueStarting(key, value);
+			Elements elms = doc.getElementsByAttributeValueStarting(IMDBLocators.ROOT_KEY, IMDBLocators.ROOT_KEY_VALUE);
 
 			for (Element elm : elms) {				
 				if (elm.getElementsByAttributeValue("class", "filmo-episodes").isEmpty()) {					
@@ -35,8 +36,7 @@ public class ScrapeIMDBPage implements IScrapePage{
 			return imdbMap;
 		} catch (IOException e) {
 			e.printStackTrace();
-			Assert.fail("IMDB Page could not be scraped");
-			throw new RuntimeException("IMDB Page could not be scraped");
+			throw new RuntimeException("JSOUP Connection could not be established!");
 		}
 
 	}

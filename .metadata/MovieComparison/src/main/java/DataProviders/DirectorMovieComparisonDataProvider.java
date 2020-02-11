@@ -4,12 +4,12 @@ import org.testng.annotations.DataProvider;
 
 public class DirectorMovieComparisonDataProvider {
 
-	   @DataProvider(name = "DirectorAndWebsiteName")
+	   @DataProvider(name = "DirectorName")
 	    public static Object[][] directorNameDataProviderMethod() {
 	        
 		   return new Object[][] {
-				   {"Steven Spielberg","IMDB","id","director"},
-				   {"Steven Spielberg","LetterBoxD","class","film-poster"}
+				   {"Steven Spielberg"},
+				  // {"Christopher Nolan"}
 		   };
 	    }
 }

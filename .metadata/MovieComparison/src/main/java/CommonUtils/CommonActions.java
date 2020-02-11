@@ -16,7 +16,6 @@ public class CommonActions {
 		
 	}
 	
-	
 	/*
 	 * Find element by Id and perform sendKeys.
 	 */
@@ -35,6 +34,13 @@ public class CommonActions {
 		
 	}
 	
-	
+	/*
+	 * Find element by Id and perform keyboard action.
+	 */
+	public boolean compareString(String actual,String expected) {
+		
+		return actual.contains(expected);
+		
+	}
 	
 }

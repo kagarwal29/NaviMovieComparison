@@ -10,19 +10,21 @@ import org.jsoup.select.Elements;
 import org.testng.Assert;
 
 import Interfaces.IScrapePage;
+import Locators.IMDBLocators;
+import Locators.LetterBoxDLocators;
 
 public class ScrapeLetterBoxDPage implements IScrapePage{
 
 	static Logger log = Logger.getLogger(ScrapeLetterBoxDPage.class.getName());
 	HashMap<String, String> letterboxdMap = new HashMap<String,String>();
 	
-	public HashMap<String,String> scrapeAndStore(String url, String key, String value){
+	public HashMap<String,String> scrapeAndStore(String url){
 		
 		Document doc;
 		try {
 			doc = Jsoup.connect(url).get();
 			log.info(String.format("Connected to '%s'",url));
-			Elements elms = doc.getElementsByAttributeValueContaining(key, value);
+			Elements elms = doc.getElementsByAttributeValueContaining(LetterBoxDLocators.ROOT_KEY, LetterBoxDLocators.ROOT_KEY_VALUE);
 			for (Element elm : elms) {				
 				letterboxdMap.put(fetchMovieTitle(elm),fetchMovieReleaseYear(elm));	
 
@@ -30,8 +32,7 @@ public class ScrapeLetterBoxDPage implements IScrapePage{
 			return letterboxdMap;
 		} catch (IOException e) {
 			e.printStackTrace();
-			Assert.fail("LetterBoxD Page could not be scraped");
-			throw new RuntimeException("LetterBoxD Page could not be scraped");
+			throw new RuntimeException("JSOUP Connection could not be established!");
 		}
 
 	}
