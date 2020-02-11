@@ -27,8 +27,8 @@ public class DirectorMovieComparison {
 	@BeforeTest
 	public void setup() {
 		CoreFactory.setBrowser(Browser.Chrome.toString());
-		list.add("IMDB");
 		list.add("LetterBoxD");
+		list.add("IMDB");
 	}
 	
 	@Test(testName = "SingleDirectorDifferentSiteComparison",

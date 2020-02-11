@@ -14,9 +14,17 @@ import Reporting.ConsolePrintInTabularFormat;
 
 public class CompareMovieList {
 
+	/*
+	 * Method to compare list of movies directed by a director across two different website.
+	 * Output 
+	 * 1) List of movies Common between two Website i.e IMDB and LetterBoxD
+	 * 2) List of movies present only on IMDB
+	 * 3) List of movies present only on LetterBoxD
+	 * 4) List of movies whose title are same but year of release is different.
+	 */
 	public CompareMovieList(Map<String, HashMap<String, String>> mpMaps) {
 
-	    
+	    if (null!=mpMaps) {
 		MapDifference<String, String> diff = Maps.difference(mpMaps.get("IMDB"), mpMaps.get("LetterBoxD"));
 	    ConsolePrintInTabularFormat table = new ConsolePrintInTabularFormat();
 	    String[] columnNames = {"Title","ReleaseDate"};
@@ -38,9 +46,13 @@ public class CompareMovieList {
 	    System.out.println(String.format("\n============Movies with same Title but Unmatching Release Date (Count - %d)=============",diffDates.size()));
 	    table.convertResultInTabularFormat(columnNames,convertValueDifferenceMapToObjectArray(diffDates));
 	    System.out.println("\n\n");
+	    }
 
 	}
 	
+	/*
+	 * Convert Map<String,String> into Object Array to be used by j-text-utils library 
+	 */
 	public Object[][] convertMapToObjectArray(Map<String,String> map){
 			
 		Object[][] arr = new Object[map.size()][2];
@@ -60,6 +72,9 @@ public class CompareMovieList {
 		return arr;
 	}
 	
+	/*
+	 * Convert Map<String,ValueDifference<String>> into Object Array to be used by j-text-utils library
+	 */
 	public Object[][] convertValueDifferenceMapToObjectArray(Map<String,ValueDifference<String>> map){
 		
 		Object[][] arr = new Object[map.size()][2];

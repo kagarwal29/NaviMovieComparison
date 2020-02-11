@@ -20,14 +20,23 @@ public class CoreFactory {
 	
 	private static WebDriver driver = null;	
 	
-	public static void setBrowser(String browser){
-		
+	/*
+	 * Set desktop browser for which automation will run
+	 */
+	public static void setBrowser(String browser){		
 		webBrowser=browser;
 	}
 	
+	/*
+	 * Get Browser Name
+	 */
 	public static String getBrowser(){
 		return webBrowser;
 	}
+	
+	/*
+	 * Function to instantiate browser specific driver
+	 */
 	private static void intializeWebDriver(){
 		
 		if (getBrowser().contentEquals("Chrome"))
@@ -37,13 +46,16 @@ public class CoreFactory {
 		}
 		else if (getBrowser().contentEquals("Firefox"))
 		{
-			System.setProperty("webdriver.gecko.driver.driver", "./src/test/resources/geckodriver.exe");
+			System.setProperty("webdriver.gecko.driver", "./src/test/resources/geckodriver.exe");
 			driver = new FirefoxDriver();
 		}
 		else
 			throw new RuntimeException(String.format("'%s' is not supported.", getBrowser())); 		
 	}
 	
+	/*
+	 * Method to return WebDriver instance
+	 */
 	public static WebDriver getWebDriverInstance() {
 		
 		  if(null==driver){
@@ -52,8 +64,9 @@ public class CoreFactory {
 	        return driver;	
 	}
 	
-
-	
+	/*
+	 * This method returns appropriate Site Object to traverse the website
+	 */
 	public static IListMovies getSiteObject(String siteName) {
 		
 		if (siteName.contentEquals("IMDB"))
@@ -64,6 +77,9 @@ public class CoreFactory {
 			throw new RuntimeException(String.format("'%s' is not supported.", siteName)); 
 	}
 	
+	/*
+	 * This method returns appropriate Page Object based on site for scraping.
+	 */
 	public static IScrapePage getPageObject(String siteName) {
 		
 		if (siteName.contentEquals("IMDB"))

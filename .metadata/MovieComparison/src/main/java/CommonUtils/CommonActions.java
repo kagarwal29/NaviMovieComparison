@@ -17,7 +17,7 @@ public class CommonActions {
 	}
 	
 	/*
-	 * Find element by Id and perform sendKeys.
+	 * Find element by locator and perform sendKeys.
 	 */
 	public void sendKeys(WebDriver driver,By locator, String text) {
 		
@@ -26,16 +26,7 @@ public class CommonActions {
 	}
 	
 	/*
-	 * Find element by Id and perform keyboard action.
-	 */
-	public void sendKeys(WebDriver driver,By locator, Keys key) {
-		
-		driver.findElement(locator).sendKeys(key);
-		
-	}
-	
-	/*
-	 * Find element by Id and perform keyboard action.
+	 * Compare two Strings and return boolean
 	 */
 	public boolean compareString(String actual,String expected) {
 		

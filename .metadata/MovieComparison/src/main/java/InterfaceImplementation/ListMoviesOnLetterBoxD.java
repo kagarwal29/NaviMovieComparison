@@ -1,9 +1,11 @@
 package InterfaceImplementation;
 
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,30 +28,24 @@ public class ListMoviesOnLetterBoxD implements IListMovies {
 
 	public String searchMoviesByDirector(String dName) {
 		driver.navigate().to(LETTERBOX_D_HOMEPAGE);
-		WebElement elm;
-		elm=wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(LetterBoxDLocators.SEARCH_BAR)));
-		if (!elm.isDisplayed())
-			Assert.fail("LetterBoxD - Could not locate Search Bar!");
+		try {
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(LetterBoxDLocators.SEARCH_BAR)));
 		util.sendKeys(driver, By.id(LetterBoxDLocators.SEARCH_BAR), dName);
-		util.sendKeys(driver, By.id(LetterBoxDLocators.SEARCH_BAR), Keys.ENTER);
+		util.click(driver, By.cssSelector(LetterBoxDLocators.SEARCH_ICON));
 		if (!util.compareString(driver.getCurrentUrl(), String.format("https://letterboxd.com/search/%s+%s/",dName.split(" ")[0],dName.split(" ")[1])))
 			Assert.fail("LetterBoxD - Could not navigate to Search Page");
-		elm=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(LetterBoxDLocators.DIR_NAME,dName))));
-		if (!elm.isDisplayed())
-			Assert.fail("LetterBoxD - Could not locate Director Name on Search Results Page!");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(LetterBoxDLocators.DIR_NAME,dName))));
 		util.click(driver, By.xpath(String.format(LetterBoxDLocators.DIR_NAME,dName)));
-		if (!util.compareString(driver.getCurrentUrl(), String.format("https://letterboxd.com/producer/%s-%s/",dName.split(" ")[0].toLowerCase(),dName.split(" ")[1].toLowerCase())))
+		if (!driver.getTitle().contains(dName))
 			Assert.fail("LetterBoxD - Could not navigate to Director details page");
-		elm=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LetterBoxDLocators.ROLE_DROPDOWN)));
-		if (!elm.isDisplayed())
-			Assert.fail("LetterBoxD - Could not locate Category Dropdown!");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LetterBoxDLocators.ROLE_DROPDOWN)));
 		util.click(driver, By.xpath(LetterBoxDLocators.ROLE_DROPDOWN));
-		elm=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(LetterBoxDLocators.SELECT_DIRECTOR,dName.split(" ")[0].toLowerCase(),dName.split(" ")[1].toLowerCase()))));
-		if (!elm.isDisplayed())
-			Assert.fail("LetterBoxD - Could not locate 'Director' item from Category Dropdown!");
-		util.click(driver, By.xpath(String.format(LetterBoxDLocators.SELECT_DIRECTOR,dName.split(" ")[0].toLowerCase(),dName.split(" ")[1].toLowerCase())));	
-//			if (!util.compareString(driver.getCurrentUrl(), String.format("https://letterboxd.com/director/%s-%s/",dName.split(" ")[0].toLowerCase(),dName.split(" ")[1].toLowerCase())));
-//				Assert.fail("LetterBoxD - Could not navigate to 'Movies By Director' details page");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(LetterBoxDLocators.SELECT_DIRECTOR,dName.split(" ")[0].toLowerCase(),dName.split(" ")[1].toLowerCase()))));
+		util.click(driver, By.xpath(String.format(LetterBoxDLocators.SELECT_DIRECTOR,dName.split(" ")[0].toLowerCase(),dName.split(" ")[1].toLowerCase())));
 		return driver.getCurrentUrl();
+		}
+		catch (TimeoutException e) {
+			throw new NoSuchElementException("LetterBoxD - Wait Timed Out! Could not locate Element");
+		}
 	}
 }
